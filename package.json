@@ -3,8 +3,8 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
-    "build": "ng build",
+    "start": "ng serve --proxy-config proxy.conf.json -o --port 0",
+    "build": "ng build --prod --build-optimizer",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"
@@ -30,6 +30,7 @@
     "ng-zorro-antd": "^1.6.0",
     "qrious": "^4.0.2",
     "rxjs": "~6.2.0",
+    "screenfull": "^3.3.3",
     "zone.js": "~0.8.26"
   },
   "devDependencies": {

@@ -1,0 +1,31 @@
+<div class="logo">
+  <a [routerLink]="['/']">
+    <img class="expanded" src="./assets/logo-full.png" alt="{{settings.app.name}}" style="max-height:40px;" />
+    <img class="collapsed" src="./assets/logo.png" alt="{{settings.app.name}}" style="max-height:30px;" />
+  </a>
+</div>
+<div class="top-nav-wrap">
+  <ul class="top-nav">
+    <!-- Menu -->
+    <li>
+      <div class="item" (click)="toggleCollapsedSideabar()">
+        <i class="anticon anticon-menu-{{settings.layout.collapsed ? 'unfold' : 'fold'}}"></i>
+      </div>
+    </li>
+    <!-- Github Page -->
+    <li>
+      <a class="item" href="//github.com/qdwxlong/ng-alain-ethan" target="_blank">
+        <i class="anticon anticon-github"></i>
+      </a>
+    </li>
+  </ul>
+  <ul class="top-nav">
+    <!-- Settings -->
+    <li class="hidden-xs">
+      <header-settings></header-settings>
+    </li>
+    <li class="hidden-xs">
+      <header-user></header-user>
+    </li>
+  </ul>
+</div>
