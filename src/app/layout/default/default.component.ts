@@ -1,20 +1,25 @@
-import { Component } from '@angular/core';
-import {
-  Router,
-  NavigationEnd,
-  RouteConfigLoadStart,
-  NavigationError,
-  NavigationCancel,
-} from '@angular/router';
+import { Component, ViewChild, ViewContainerRef, OnInit, OnDestroy, ElementRef, Renderer2, Inject } from '@angular/core';
+import { Router, NavigationEnd, RouteConfigLoadStart, NavigationError, NavigationCancel } from '@angular/router';
 import { NzMessageService } from 'ng-zorro-antd';
 import { ScrollService, MenuService, SettingsService } from '@delon/theme';
+
+import { Subscription } from 'rxjs';
+import { updateHostClass } from '@delon/util';
+import { DOCUMENT } from '@angular/common';
 
 @Component({
   selector: 'layout-default',
   templateUrl: './default.component.html',
+  preserveWhitespaces: false,
+  host: {
+    '[class.alain-default]': 'true',
+  },
 })
-export class LayoutDefaultComponent {
+export class LayoutDefaultComponent implements OnInit, OnDestroy {
+  private notify$: Subscription;
   isFetching = false;
+  @ViewChild('settingHost', { read: ViewContainerRef })
+  settingHost: ViewContainerRef;
 
   constructor(
     router: Router,
@@ -22,6 +27,9 @@ export class LayoutDefaultComponent {
     _message: NzMessageService,
     public menuSrv: MenuService,
     public settings: SettingsService,
+    private el: ElementRef,
+    private renderer: Renderer2,
+    @Inject(DOCUMENT) private doc: any,
   ) {
     // scroll to top in change page
     router.events.subscribe(evt => {
@@ -43,5 +51,33 @@ export class LayoutDefaultComponent {
         this.isFetching = false;
       }, 100);
     });
+  }
+
+  private setClass() {
+    const { el, renderer, settings } = this;
+    const layout = settings.layout;
+    updateHostClass(
+      el.nativeElement,
+      renderer,
+      {
+        ['alain-default']: true,
+        [`alain-default__fixed`]: layout.fixed,
+        [`alain-default__boxed`]: layout.boxed,
+        [`alain-default__collapsed`]: layout.collapsed,
+      },
+      true,
+    );
+
+    this.doc.body.classList[layout.colorWeak ? 'add' : 'remove']('color-weak');
+  }
+
+
+  ngOnInit() {
+    this.notify$ = this.settings.notify.subscribe(() => this.setClass());
+    this.setClass();
+  }
+
+  ngOnDestroy() {
+    this.notify$.unsubscribe();
   }
 }

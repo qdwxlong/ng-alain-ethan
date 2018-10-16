@@ -21,7 +21,7 @@ export class StartupService {
 
   private viaHttp(resolve: any, reject: any) {
     zip(
-      this.httpClient.get('assets/tmp/app-data.json')
+      this.httpClient.get('/security/user')
     ).pipe(
       // 接收其他拦截器后产生的异常消息
       catchError(([appData]) => {
@@ -52,7 +52,7 @@ export class StartupService {
       description: systemInfo.title
     };
     const user: any = {
-      name: data.userName,
+      name: data.name,
       avatar: data.icon,
       email: data.email
     };

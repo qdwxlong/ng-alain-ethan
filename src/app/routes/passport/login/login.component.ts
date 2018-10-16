@@ -31,10 +31,10 @@ export class UserLoginComponent {
     private startupSrv: StartupService,
   ) {
     this.form = fb.group({
-      userName: [null, [Validators.required]],
-      password: [null, Validators.required],
-      captcha: [null],
-      remember: [true],
+      userName: [localStorage.getItem("username"), [Validators.required]],
+      password: [localStorage.getItem("password"), Validators.required],
+      captcha: [null, Validators.required],
+      remember: [localStorage.getItem("username") != null],
     });
     modalSrv.closeAll();
   }
@@ -77,7 +77,7 @@ export class UserLoginComponent {
       };
       this.http.post(`/security/login?jCaptchaCode=${jCaptchaCode}`, user).subscribe(
         (data: any) => {
-          this.jcaptchaSrc = this.jcaptchaUrl + "?t=" + new Date().getTime();
+          this.refreshCaptcha();
           // 清空路由复用信息
           this.reuseTabService.clear();
           if (this.remember.value) {
@@ -89,6 +89,12 @@ export class UserLoginComponent {
           }
           this.startupSrv.init(data);
           this.router.navigateByUrl("/");
+        },
+        error => {
+          this.refreshCaptcha();
+        },
+        () => {
+          this.refreshCaptcha();
         }
       );
     }

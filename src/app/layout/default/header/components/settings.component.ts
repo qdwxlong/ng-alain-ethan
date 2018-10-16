@@ -6,7 +6,7 @@ import { NzModalService, NzMessageService } from 'ng-zorro-antd';
   selector: 'header-settings',
   template: `
     <nz-dropdown nzTrigger="click" nzPlacement="bottomRight">
-      <div class="item" nz-dropdown>
+      <div class="alain-default__nav-item" nz-dropdown>
         <i class="anticon anticon-setting"></i>
       </div>
       <div nz-menu style="width:200px;">
